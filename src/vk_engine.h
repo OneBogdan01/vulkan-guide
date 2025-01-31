@@ -4,6 +4,12 @@
 #pragma once
 
 #include <vk_types.h>
+struct FrameData {
+  VkCommandPool _commandPool;
+  VkCommandBuffer _mainCommandBuffer;
+};
+
+constexpr unsigned int FRAME_OVERLAP = 2;
 
 class VulkanEngine {
  public:
@@ -18,6 +24,13 @@ class VulkanEngine {
 
   // run main loop
   void run();
+
+  FrameData _frames[FRAME_OVERLAP];
+
+  FrameData& get_current_frame();
+
+  VkQueue _graphicsQueue;
+  uint32_t _graphicsQueueFamily;
 
   VkInstance _instance;                       // Vulkan library handle
   VkDebugUtilsMessengerEXT _debug_messenger;  // Vulkan debug output handle
