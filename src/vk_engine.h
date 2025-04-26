@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "vk_descriptors.h"
+
 #include <vk_types.h>
 
 struct DeletionQueue {
@@ -46,6 +48,7 @@ class VulkanEngine {
 
   // run main loop
   void run();
+  void draw_imgui(VkCommandBuffer cmd, VkImageView targetImageView);
 
   FrameData _frames[FRAME_OVERLAP];
 
@@ -77,13 +80,31 @@ class VulkanEngine {
   std::vector<VkImageView> _swapchainImageViews;
   VkExtent2D _swapchainExtent;
 
+  DescriptorAllocator globalDescriptorAllocator;
+
+  VkDescriptorSet _drawImageDescriptors;
+  VkDescriptorSetLayout _drawImageDescriptorLayout;
+
+  VkPipeline _gradientPipeline;
+  VkPipelineLayout _gradientPipelineLayout;
+  // immediate submit structures
+  VkFence _immFence;
+  VkCommandBuffer _immCommandBuffer;
+  VkCommandPool _immCommandPool;
+
+
+  void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
  private:
+  void init_imgui();
   VmaAllocator _allocator;
   DeletionQueue _mainDeletionQueue;
 
   AllocatedImage _drawImage;
   VkExtent2D _drawExtent;
 
+  void init_pipelines();
+  void init_background_pipelines();
+  void init_descriptors();
   void init_vulkan();
   void init_swapchain();
   void init_commands();
