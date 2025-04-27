@@ -31,6 +31,20 @@ struct FrameData {
   VkFence _renderFence;
   DeletionQueue _deletionQueue;
 };
+struct ComputePushConstants {
+  glm::vec4 data1;
+  glm::vec4 data2;
+  glm::vec4 data3;
+  glm::vec4 data4;
+};
+struct ComputeEffect {
+  const char* name;
+
+  VkPipeline pipeline;
+  VkPipelineLayout layout;
+
+  ComputePushConstants data;
+};
 
 constexpr unsigned int FRAME_OVERLAP = 2;
 
@@ -111,4 +125,7 @@ class VulkanEngine {
   void init_sync_structures();
   void create_swapchain(uint32_t width, uint32_t height);
   void destroy_swapchain();
+  std::vector<ComputeEffect> backgroundEffects;
+  int currentBackgroundEffect{ 0 };
+
 };
