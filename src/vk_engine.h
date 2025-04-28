@@ -57,6 +57,7 @@ class VulkanEngine {
   void cleanup();
   void draw_background(VkCommandBuffer cmd);
 
+  void draw_geometry(VkCommandBuffer cmd);
   // draw loop
   void draw();
 
@@ -110,12 +111,17 @@ class VulkanEngine {
   void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
  private:
   void init_imgui();
+
+  VkPipelineLayout _trianglePipelineLayout;
+  VkPipeline _trianglePipeline;
+
   VmaAllocator _allocator;
   DeletionQueue _mainDeletionQueue;
 
   AllocatedImage _drawImage;
   VkExtent2D _drawExtent;
 
+  void init_triangle_pipeline();
   void init_pipelines();
   void init_background_pipelines();
   void init_descriptors();
